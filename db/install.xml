@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="enrol/storefront/db" VERSION="2026082401" COMMENT="XMLDB file for Storefront enrolment">
+  <TABLES>
+    <TABLE NAME="enrol_storefront_purchase" COMMENT="Storefront course fulfilment and renewal state">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="enrolid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="orderid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="orderlineid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="productid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="roleid" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="billingtype" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="oneoff"/>
+        <FIELD NAME="subscriptionref" TYPE="char" LENGTH="255" NOTNULL="false"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="active"/>
+        <FIELD NAME="timestart" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timeend" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="enrol_fk" TYPE="foreign" FIELDS="enrolid" REFTABLE="enrol" REFFIELDS="id"/>
+        <KEY NAME="user_fk" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="orderline_enrol_uix" UNIQUE="true" FIELDS="orderlineid,enrolid"/>
+        <INDEX NAME="order_ix" UNIQUE="false" FIELDS="orderid"/>
+        <INDEX NAME="user_ix" UNIQUE="false" FIELDS="userid"/>
+        <INDEX NAME="product_ix" UNIQUE="false" FIELDS="productid"/>
+        <INDEX NAME="subscription_ix" UNIQUE="false" FIELDS="subscriptionref"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
