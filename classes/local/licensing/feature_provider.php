@@ -12,7 +12,7 @@ final class feature_provider {
             'policyarea' => 'storefront', 'policyproduct' => 'coursepurchase',
             'policyproductlabel' => get_string('licensepolicyproduct', 'enrol_storefront'),
             'policyorder' => 40,
-            'degradation' => 'Normal dependency preflight; no licence gate.',
+            'degradation' => get_string('licensepolicydegradation', 'enrol_storefront'),
             'discovery' => 'Shown as an included fulfilment adapter.',
         ]];
     }

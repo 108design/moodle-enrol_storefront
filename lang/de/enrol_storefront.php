@@ -29,3 +29,4 @@ $string['privacy:metadata:enrol_storefront_purchase:timestart'] = 'Beginn des Zu
 $string['privacy:metadata:enrol_storefront_purchase:timeend'] = 'Ende des Zugangs oder null für unbegrenzten Zugang.';
 $string['privacy:metadata:enrol_storefront_purchase:timecreated'] = 'Zeitpunkt der Erstellung.';
 $string['privacy:metadata:enrol_storefront_purchase:timemodified'] = 'Zeitpunkt der letzten Änderung.';
+$string['licensepolicydegradation'] = 'Die Kursauslieferung ist in Storefront enthalten und besitzt kein eigenes Lizenz-Gate. Die normale Abhängigkeitsprüfung bleibt bestehen.';
