@@ -134,34 +134,39 @@ final class fulfilment_service {
             $timeend = $now + (int) $snapshot['enrolperiod'];
         }
 
-        $transaction = $DB->start_delegated_transaction();
-        $plugin = enrol_get_plugin('storefront');
-        $existing = $DB->get_record('user_enrolments', ['enrolid' => $instance->id, 'userid' => $userid]);
-        if ($existing) {
-            $effectiveend = self::later_end((int) $existing->timeend, $timeend);
-            $plugin->update_user_enrol($instance, $userid, ENROL_USER_ACTIVE,
-                min((int) $existing->timestart, $now), $effectiveend);
-            $timeend = $effectiveend;
-        } else {
-            $plugin->enrol_user($instance, $userid, (int) $snapshot['roleid'], $now, $timeend, ENROL_USER_ACTIVE);
-        }
-        $DB->insert_record('enrol_storefront_purchase', (object) [
-            'enrolid' => (int) $instance->id,
-            'userid' => $userid,
-            'orderid' => $orderid,
-            'orderlineid' => $orderlineid,
-            'productid' => (int) $snapshot['productid'],
-            'courseid' => (int) $snapshot['courseid'],
-            'roleid' => (int) $snapshot['roleid'],
-            'billingtype' => $billingtype,
-            'subscriptionref' => $subscriptionreference,
-            'status' => 'active',
-            'timestart' => $now,
-            'timeend' => $timeend,
-            'timecreated' => $now,
-            'timemodified' => $now,
-        ]);
-        $transaction->allow_commit();
+        access_lock::with_pairs([[(int) $instance->id, $userid]], static function() use ($DB, $instance, $userid,
+                $orderid, $orderlineid, $snapshot, $billingtype, $subscriptionreference, $now, $timeend): void {
+            if ($DB->record_exists('enrol_storefront_purchase', [
+                    'orderlineid' => $orderlineid,
+                    'enrolid' => (int) $instance->id,
+                ])) {
+                return;
+            }
+            $transaction = $DB->start_delegated_transaction();
+            $plugin = enrol_get_plugin('storefront');
+            if (!$DB->record_exists('user_enrolments', ['enrolid' => $instance->id, 'userid' => $userid])) {
+                $plugin->enrol_user($instance, $userid, (int) $snapshot['roleid'], $now, $timeend,
+                    ENROL_USER_ACTIVE);
+            }
+            $DB->insert_record('enrol_storefront_purchase', (object) [
+                'enrolid' => (int) $instance->id,
+                'userid' => $userid,
+                'orderid' => $orderid,
+                'orderlineid' => $orderlineid,
+                'productid' => (int) $snapshot['productid'],
+                'courseid' => (int) $snapshot['courseid'],
+                'roleid' => (int) $snapshot['roleid'],
+                'billingtype' => $billingtype,
+                'subscriptionref' => $subscriptionreference,
+                'status' => 'active',
+                'timestart' => $now,
+                'timeend' => $timeend,
+                'timecreated' => $now,
+                'timemodified' => $now,
+            ]);
+            self::sync_effective_access($instance, $userid);
+            $transaction->allow_commit();
+        });
     }
 
     public static function renew_order(int $orderid, int $validuntil): void {
@@ -169,27 +174,10 @@ final class fulfilment_service {
         if ($validuntil <= time()) {
             return;
         }
-        $plugin = enrol_get_plugin('storefront');
-        foreach ($DB->get_records('enrol_storefront_purchase', [
+        self::renew_purchases($DB->get_records('enrol_storefront_purchase', [
             'orderid' => $orderid,
             'billingtype' => 'subscription',
-        ]) as $purchase) {
-            $instance = $DB->get_record('enrol', ['id' => $purchase->enrolid, 'enrol' => 'storefront']);
-            $userenrolment = $DB->get_record('user_enrolments', [
-                'enrolid' => $purchase->enrolid,
-                'userid' => $purchase->userid,
-            ]);
-            if (!$instance || !$userenrolment) {
-                continue;
-            }
-            $timeend = self::later_end((int) $userenrolment->timeend, $validuntil);
-            $plugin->update_user_enrol($instance, (int) $purchase->userid, ENROL_USER_ACTIVE,
-                (int) $userenrolment->timestart, $timeend);
-            $purchase->status = 'active';
-            $purchase->timeend = $timeend;
-            $purchase->timemodified = time();
-            $DB->update_record('enrol_storefront_purchase', $purchase);
-        }
+        ]), $validuntil);
     }
 
     /** Extend only the course purchase belonging to one verified subscription line. */
@@ -198,63 +186,20 @@ final class fulfilment_service {
         if ($validuntil <= time()) {
             return;
         }
-        $purchases = $DB->get_records('enrol_storefront_purchase', [
+        self::renew_purchases($DB->get_records('enrol_storefront_purchase', [
             'orderlineid' => $orderlineid,
             'billingtype' => 'subscription',
-        ]);
-        foreach ($purchases as $purchase) {
-            $instance = $DB->get_record('enrol', ['id' => $purchase->enrolid, 'enrol' => 'storefront']);
-            $userenrolment = $DB->get_record('user_enrolments', [
-                'enrolid' => $purchase->enrolid,
-                'userid' => $purchase->userid,
-            ]);
-            if (!$instance || !$userenrolment) {
-                continue;
-            }
-            $timeend = self::later_end((int) $userenrolment->timeend, $validuntil);
-            enrol_get_plugin('storefront')->update_user_enrol($instance, (int) $purchase->userid, ENROL_USER_ACTIVE,
-                (int) $userenrolment->timestart, $timeend);
-            $purchase->status = 'active';
-            $purchase->timeend = $timeend;
-            $purchase->timemodified = time();
-            $DB->update_record('enrol_storefront_purchase', $purchase);
-        }
+        ]), $validuntil);
     }
 
     /** Fail-safe entry point for future verified refunds, revocations and unpaid expiries. */
     public static function suspend_order(int $orderid): void {
-        global $DB;
-        $affected = [];
-        foreach ($DB->get_records('enrol_storefront_purchase', ['orderid' => $orderid]) as $purchase) {
-            $instance = $DB->get_record('enrol', ['id' => $purchase->enrolid, 'enrol' => 'storefront']);
-            $purchase->status = 'suspended';
-            $purchase->timemodified = time();
-            $DB->update_record('enrol_storefront_purchase', $purchase);
-            if ($instance) {
-                $affected[$purchase->enrolid . ':' . $purchase->userid] = [$instance, (int) $purchase->userid];
-            }
-        }
-        foreach ($affected as [$instance, $userid]) {
-            self::sync_effective_access($instance, $userid);
-        }
+        self::set_order_status($orderid, 'suspended');
     }
 
     /** Restore purchases from one order after a recovered payment or won dispute. */
     public static function resume_order(int $orderid): void {
-        global $DB;
-        $affected = [];
-        foreach ($DB->get_records('enrol_storefront_purchase', ['orderid' => $orderid]) as $purchase) {
-            $instance = $DB->get_record('enrol', ['id' => $purchase->enrolid, 'enrol' => 'storefront']);
-            $purchase->status = 'active';
-            $purchase->timemodified = time();
-            $DB->update_record('enrol_storefront_purchase', $purchase);
-            if ($instance) {
-                $affected[$purchase->enrolid . ':' . $purchase->userid] = [$instance, (int) $purchase->userid];
-            }
-        }
-        foreach ($affected as [$instance, $userid]) {
-            self::sync_effective_access($instance, $userid);
-        }
+        self::set_order_status($orderid, 'active');
     }
 
     /** Suspend exactly one delivered order line and then recalculate overlapping course access. */
@@ -278,27 +223,36 @@ final class fulfilment_service {
         $params['productid'] = $productid;
         $purchases = $DB->get_records_select('enrol_storefront_purchase',
             "productid = :productid AND orderid {$insql}", $params);
-        $affected = [];
-        foreach ($purchases as $purchase) {
-            $instance = $DB->get_record('enrol', ['id' => $purchase->enrolid, 'enrol' => 'storefront']);
-            if ($instance) {
-                $affected[$purchase->enrolid . ':' . $purchase->userid] = [$instance, (int) $purchase->userid];
+        $pairs = array_map(static fn(\stdClass $purchase): array => [
+            (int) $purchase->enrolid,
+            (int) $purchase->userid,
+        ], $purchases);
+        access_lock::with_pairs($pairs, static function() use ($DB, $purchases): void {
+            $affected = [];
+            foreach ($purchases as $purchase) {
+                $instance = $DB->get_record('enrol', ['id' => $purchase->enrolid, 'enrol' => 'storefront']);
+                if ($instance) {
+                    $affected[$purchase->enrolid . ':' . $purchase->userid] = [
+                        $instance,
+                        (int) $purchase->userid,
+                    ];
+                }
             }
-        }
-        if ($purchases !== []) {
-            $DB->delete_records_list('enrol_storefront_purchase', 'id', array_keys($purchases));
-        }
-        $plugin = enrol_get_plugin('storefront');
-        foreach ($affected as [$instance, $userid]) {
-            if (!$DB->record_exists('enrol_storefront_purchase', [
-                'enrolid' => $instance->id,
-                'userid' => $userid,
-            ])) {
-                $plugin->unenrol_user($instance, $userid);
-            } else {
-                self::sync_effective_access($instance, $userid);
+            if ($purchases !== []) {
+                $DB->delete_records_list('enrol_storefront_purchase', 'id', array_keys($purchases));
             }
-        }
+            $plugin = enrol_get_plugin('storefront');
+            foreach ($affected as [$instance, $userid]) {
+                if (!$DB->record_exists('enrol_storefront_purchase', [
+                    'enrolid' => $instance->id,
+                    'userid' => $userid,
+                ])) {
+                    $plugin->unenrol_user($instance, $userid);
+                } else {
+                    self::sync_effective_access($instance, $userid);
+                }
+            }
+        });
     }
 
     /** Delete the Storefront enrolment mapping once no delivered purchases remain. */
@@ -315,6 +269,93 @@ final class fulfilment_service {
             $instance = $DB->get_record('enrol', ['id' => $mapping->enrolid, 'enrol' => 'storefront'], '*', MUST_EXIST);
             enrol_get_plugin('storefront')->delete_instance($instance);
         }
+    }
+
+    /** Recalculate one effective enrolment after a controlled projection repair. */
+    public static function reconcile_effective_access(int $enrolid, int $userid): void {
+        global $DB;
+        $instance = $DB->get_record('enrol', ['id' => $enrolid, 'enrol' => 'storefront']);
+        if (!$instance) {
+            return;
+        }
+        access_lock::with_pairs([[$enrolid, $userid]], static function() use ($instance, $userid): void {
+            self::sync_effective_access($instance, $userid);
+        });
+    }
+
+    /** @param \stdClass[] $purchases */
+    private static function renew_purchases(array $purchases, int $validuntil): void {
+        global $DB;
+        $pairs = array_map(static fn(\stdClass $purchase): array => [
+            (int) $purchase->enrolid,
+            (int) $purchase->userid,
+        ], $purchases);
+        $ids = array_map(static fn(\stdClass $purchase): int => (int) $purchase->id, $purchases);
+        access_lock::with_pairs($pairs, static function() use ($DB, $ids, $validuntil): void {
+            $transaction = $DB->start_delegated_transaction();
+            $affected = [];
+            foreach ($ids as $id) {
+                $purchase = $DB->get_record('enrol_storefront_purchase', ['id' => $id]);
+                if (!$purchase) {
+                    continue;
+                }
+                $instance = $DB->get_record('enrol', ['id' => $purchase->enrolid, 'enrol' => 'storefront']);
+                $purchase->status = 'active';
+                // A renewal extends this purchase only; it never imports the aggregate enrolment end.
+                $purchase->timeend = max((int) $purchase->timeend, $validuntil);
+                $purchase->timemodified = time();
+                $DB->update_record('enrol_storefront_purchase', $purchase);
+                if ($instance) {
+                    $affected[$purchase->enrolid . ':' . $purchase->userid] = [
+                        $instance,
+                        (int) $purchase->userid,
+                    ];
+                }
+            }
+            foreach ($affected as [$instance, $userid]) {
+                self::sync_effective_access($instance, $userid);
+            }
+            $transaction->allow_commit();
+        });
+    }
+
+    private static function set_order_status(int $orderid, string $status): void {
+        global $DB;
+        self::set_purchase_status($DB->get_records('enrol_storefront_purchase', ['orderid' => $orderid]), $status);
+    }
+
+    /** @param \stdClass[] $purchases */
+    private static function set_purchase_status(array $purchases, string $status): void {
+        global $DB;
+        $pairs = array_map(static fn(\stdClass $purchase): array => [
+            (int) $purchase->enrolid,
+            (int) $purchase->userid,
+        ], $purchases);
+        $ids = array_map(static fn(\stdClass $purchase): int => (int) $purchase->id, $purchases);
+        access_lock::with_pairs($pairs, static function() use ($DB, $ids, $status): void {
+            $transaction = $DB->start_delegated_transaction();
+            $affected = [];
+            foreach ($ids as $id) {
+                $purchase = $DB->get_record('enrol_storefront_purchase', ['id' => $id]);
+                if (!$purchase) {
+                    continue;
+                }
+                $instance = $DB->get_record('enrol', ['id' => $purchase->enrolid, 'enrol' => 'storefront']);
+                $purchase->status = $status;
+                $purchase->timemodified = time();
+                $DB->update_record('enrol_storefront_purchase', $purchase);
+                if ($instance) {
+                    $affected[$purchase->enrolid . ':' . $purchase->userid] = [
+                        $instance,
+                        (int) $purchase->userid,
+                    ];
+                }
+            }
+            foreach ($affected as [$instance, $userid]) {
+                self::sync_effective_access($instance, $userid);
+            }
+            $transaction->allow_commit();
+        });
     }
 
     private static function sync_effective_access(\stdClass $instance, int $userid): void {
@@ -348,25 +389,8 @@ final class fulfilment_service {
 
     private static function set_line_status(int $orderlineid, string $status): void {
         global $DB;
-        $affected = [];
-        foreach ($DB->get_records('enrol_storefront_purchase', ['orderlineid' => $orderlineid]) as $purchase) {
-            $instance = $DB->get_record('enrol', ['id' => $purchase->enrolid, 'enrol' => 'storefront']);
-            $purchase->status = $status;
-            $purchase->timemodified = time();
-            $DB->update_record('enrol_storefront_purchase', $purchase);
-            if ($instance) {
-                $affected[$purchase->enrolid . ':' . $purchase->userid] = [$instance, (int) $purchase->userid];
-            }
-        }
-        foreach ($affected as [$instance, $userid]) {
-            self::sync_effective_access($instance, $userid);
-        }
-    }
-
-    private static function later_end(int $current, int $candidate): int {
-        if ($current === 0 || $candidate === 0) {
-            return 0;
-        }
-        return max($current, $candidate);
+        self::set_purchase_status($DB->get_records('enrol_storefront_purchase', [
+            'orderlineid' => $orderlineid,
+        ]), $status);
     }
 }

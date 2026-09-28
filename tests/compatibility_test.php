@@ -12,7 +12,7 @@ namespace enrol_storefront;
 defined('MOODLE_INTERNAL') || die();
 
 /** Compatibility-boundary regression tests. */
-final class compatibility_test extends \advanced_testcase {
+final class compatibility_test extends \basic_testcase {
     public function test_enrol_page_rendering_isolated_behind_feature_detection(): void {
         $plugin = file_get_contents(__DIR__ . '/../classes/plugin.php');
         $renderer = file_get_contents(__DIR__ . '/../classes/local/enrol_page_renderer.php');

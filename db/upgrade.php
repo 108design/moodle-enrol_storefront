@@ -29,5 +29,15 @@ function xmldb_enrol_storefront_upgrade(int $oldversion): bool {
         }
         upgrade_plugin_savepoint(true, 2026082401, 'enrol', 'storefront');
     }
+    if ($oldversion < 2026090700) {
+        $result = \enrol_storefront\local\purchase_period_repair::repair_all();
+        mtrace('Storefront purchase-period repair: ' . $result['repaired'] . ' repaired, '
+            . $result['ambiguous'] . ' left unchanged for review.');
+        upgrade_plugin_savepoint(true, 2026090700, 'enrol', 'storefront');
+    }
+    if ($oldversion < 2026090701) {
+        // Version-only savepoint for the Storefront 2026090702 dependency floor.
+        upgrade_plugin_savepoint(true, 2026090701, 'enrol', 'storefront');
+    }
     return true;
 }
