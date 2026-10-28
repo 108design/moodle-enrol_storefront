@@ -1,4 +1,11 @@
 <?php
+/**
+ * File documentation for version.php.
+ *
+ * @package   enrol_storefront
+ * @copyright 2026 Andreas Giesen <andreas@108design.com>
+ * @license   108design source-available software license; see LICENSE.md
+ */
 // This file is part of a 108design source-available software product.
 //
 // Copyright (C) 2026 Andreas Giesen <andreas@108design.com>
@@ -10,10 +17,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'enrol_storefront';
-$plugin->version = 2026102502;
+$plugin->version = 2026102900;
 $plugin->requires = 2024100700; // Moodle 4.5.
 $plugin->maturity = MATURITY_BETA;
-$plugin->release = '0.9.0-beta';
+$plugin->release = '0.10.0-beta';
 $plugin->dependencies = [
     'local_storefront' => 2026090702,
 ];

@@ -1,4 +1,11 @@
 <?php
+/**
+ * File documentation for classes/privacy/provider.php.
+ *
+ * @package   enrol_storefront
+ * @copyright 2026 Andreas Giesen <andreas@108design.com>
+ * @license   108design source-available software license; see LICENSE.md
+ */
 // This file is part of a 108design source-available software product.
 //
 // Copyright (C) 2026 Andreas Giesen <andreas@108design.com>
