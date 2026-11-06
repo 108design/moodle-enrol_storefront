@@ -148,7 +148,7 @@ class enrol_storefront_plugin extends enrol_plugin {
             'defaultunit' => DAYSECS,
         ]);
         $mform->setDefault('enrolperiod', 0);
-        $mform->addHelpButton('enrolperiod', 'enrolperiod', 'enrol');
+        $mform->addHelpButton('enrolperiod', 'enrolperiod', 'enrol_storefront');
     }
 
     public function edit_instance_validation($data, $files, $instance, $context) {

@@ -62,6 +62,7 @@ final class purchase_period_repair {
     private static function expected_end(\stdClass $purchase): ?int {
         global $DB;
         if ((string) $purchase->billingtype === 'subscription') {
+            if (!$DB->get_manager()->table_exists('local_storefront_billctr')) { return null; }
             $contracts = $DB->get_records('local_storefront_billctr', [
                 'orderlineid' => $purchase->orderlineid,
                 'iscurrent' => 1,

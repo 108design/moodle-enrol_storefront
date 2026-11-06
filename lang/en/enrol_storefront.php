@@ -37,3 +37,34 @@ $string['privacy:metadata:enrol_storefront_purchase:timeend'] = 'When access end
 $string['privacy:metadata:enrol_storefront_purchase:timecreated'] = 'When the delivery record was created.';
 $string['privacy:metadata:enrol_storefront_purchase:timemodified'] = 'When the delivery record was last changed.';
 $string['licensepolicydegradation'] = 'Course fulfilment is included in Storefront and has no separate license gate. Normal dependency preflight remains in place.';
+
+// Shared independent signed update protection.
+$string['updateguard_heading'] = 'Update stopped';
+$string['updateguard_component'] = 'The package for {$a} was rejected.';
+$string['updateguard_hint'] = 'Use an approved package for the installed edition. You can review the operation again.';
+$string['updateguard_unchanged'] = 'This request did not replace plugin files.';
+$string['updateguard_help'] = 'The installed plugin checks the publisher signature, package contents, permitted update channel and compatibility before replacement. A valid signature does not authorise a different edition. If one package is rejected, the whole batch stops.';
+$string['updateguard_signature'] = 'The publisher signature or package contents could not be verified.';
+$string['updateguard_policy'] = 'This package does not match the installed edition or permitted package profile.';
+$string['updateguard_channel'] = 'Updates through this channel are not enabled for this plugin.';
+$string['updateguard_metadata'] = 'The version or dependency information is inconsistent.';
+$string['updateguard_dependency'] = 'A required plugin version is missing. Update the dependency together with this plugin or beforehand.';
+$string['updateguard_approval'] = 'The packages or installed state have changed since the preview. Review the operation again.';
+$string['updateguard_busy'] = 'Another installation is running. Try again after it finishes.';
+$string['updateguard_installed'] = 'The installed update protection is incomplete. Restore the files of the last approved installed version.';
+$string['updateguard_operation'] = 'This combination of installation actions is not supported. Start a single update operation again.';
+$string['updateguard_failed'] = 'The update could not be verified. No installation was started.';
+$string['updateguard_back'] = 'Return to plugin overview';
+// End shared independent signed update protection.
+
+$string['enrolperiod'] = 'Course Access Duration';
+
+$string['enrolperiod_help'] = ('Leave disabled for access without a scheduled end date. A timed period starts '
+    . 'when course access is delivered. Changes apply to future orders; saved orders '
+    . 'retain their original duration.');
+
+$string['unlimitedaccess'] = 'No fixed end date';
+$string['gateway_buy'] = 'Buy course access';
+$string['gateway_oneoff'] = 'One-time payment. Access starts when provisioned; the duration is shown per course.';
+$string['gateway_subscription'] = 'Subscription. Check the billing interval and terms at checkout.';
+$string['gateway_return'] = 'Continue to your course';

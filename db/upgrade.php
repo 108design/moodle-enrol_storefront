@@ -13,6 +13,8 @@ defined('MOODLE_INTERNAL') || die();
 
 function xmldb_enrol_storefront_upgrade(int $oldversion): bool {
     global $DB;
+    require_once(__DIR__ . '/le_upgrade.php');
+    if (xmldb_enrol_storefront_upgrade_le($oldversion)) { $oldversion = 2026110600; }
     if ($oldversion < 2026081003) {
         $sql = "UPDATE {enrol} e
                    SET customchar1 = (SELECT p.identifier

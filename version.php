@@ -17,10 +17,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'enrol_storefront';
-$plugin->version = 2026102900;
+$plugin->version = 2026110624;
 $plugin->requires = 2024100700; // Moodle 4.5.
 $plugin->maturity = MATURITY_BETA;
-$plugin->release = '0.10.0-beta';
+$plugin->release = '0.13.0-beta';
 $plugin->dependencies = [
     'local_storefront' => 2026090702,
 ];
