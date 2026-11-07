@@ -9,19 +9,26 @@
 // This file is part of a 108design source-available software product.
 // Copyright (C) 2026 Andreas Giesen <andreas@108design.com>
 
-$string['pluginname'] = 'Storefront-Kurskauf';
-$string['licensepolicyproduct'] = 'Kurskauf';
-$string['pluginname_desc'] = 'Schreibt Nutzer/innen nach einem verifizierten Kurskauf im 108design Storefront ein.';
-$string['storefront:config'] = 'Einschreibemethode Storefront-Kurskauf konfigurieren';
+$string['pluginname'] = 'Storefront Enrolment';
+$string['licensepolicyproduct'] = 'Storefront Enrolment';
+$string['pluginname_desc'] = 'Verknüpft Storefront-Produkte mit Moodle-Kursen und schaltet den Zugang frei, sobald Storefront die Zahlung bestätigt.';
+$string['hostunsupported'] = 'Installiere oder aktualisiere 108design Storefront auf eine kompatible Version, bevor Du fortfährst.';
+$string['storefront:config'] = 'Einschreibemethode Storefront Enrolment konfigurieren';
 $string['storefront:manage'] = 'Einschreibungen aus Storefront-Kurskäufen verwalten';
 $string['storefront:unenrol'] = 'Storefront-Kund/innen ausschreiben';
 $string['product'] = 'Storefront-Produkt';
 $string['product_help'] = 'Verknüpft diesen Kurs mit einem Storefront-Lizenz-, Software- oder Kursprodukt. Ein Produkt kann mehrere Kurse enthalten; derselbe Kurs kann zu mehreren Produkten gehören.';
-$string['productmissing'] = 'Bitte ein verfügbares Storefront-Kursprodukt auswählen.';
+$string['productmissing'] = 'Bitte ein verfügbares Storefront-Produkt auswählen.';
 $string['productmapped'] = 'Dieses Produkt ist bereits mit diesem Kurs verknüpft.';
-$string['instanceexists'] = 'Dieser Kurs besitzt bereits die Einschreibemethode Storefront-Kurskauf.';
+$string['instanceexists'] = 'Dieser Kurs besitzt bereits die Einschreibemethode Storefront Enrolment.';
 $string['restorehint'] = 'Wiederhergestellter, nicht aktiver Storefront-Hinweis: {$a}';
-$string['purchasenote'] = 'Kund/innen kaufen diesen Kurs im Store. Eine verifizierte bezahlte Bestellung gewährt Zugriff, sobald sie mit dem Moodle-Konto verknüpft wurde.';
+$string['purchasenote'] = 'Die Einschreibemethode schaltet den Kurszugang frei, sobald Storefront die Zahlung bestätigt und die Bestellung dem Moodle-Konto zugeordnet hat.';
+$string['instancename'] = 'Angepasster Name';
+$string['instancename_help'] = 'Mit einem eigenen Namen kannst Du diese Zuordnung von den anderen Einschreibemethoden des Kurses unterscheiden.';
+$string['instancestatus'] = 'Status';
+$string['instancestatus_help'] = 'Aktiviere die Zuordnung, damit der Kauf des ausgewählten Storefront-Produkts den Kurszugang freischaltet.';
+$string['instancerole'] = 'Rolle';
+$string['instancerole_help'] = 'Bei der Freischaltung weist das Plugin diese Moodle-Rolle im Kurs zu.';
 $string['gotostore'] = 'Im Store ansehen';
 $string['courselink'] = '{$a->product} · {$a->course}';
 $string['mappingunavailable'] = 'Dieses Storefront-Produkt ist nicht mit einer verfügbaren Kurs-Einschreibemethode verknüpft.';
@@ -32,6 +39,8 @@ $string['privacy:metadata:enrol_storefront_purchase:orderid'] = 'Storefront-Best
 $string['privacy:metadata:enrol_storefront_purchase:orderlineid'] = 'Unveränderliche Storefront-Bestellposition, die erfüllt wurde.';
 $string['privacy:metadata:enrol_storefront_purchase:courseid'] = 'Freigeschalteter Kurs.';
 $string['privacy:metadata:enrol_storefront_purchase:status'] = 'Aktueller Auslieferungsstatus.';
+$string['privacy:metadata:enrol_storefront_purchase:manualsuspended'] = 'Ob der Shopbetreiber diesen gekauften Kurszugang gesperrt hat.';
+$string['eventmanualaccesschanged'] = 'Manueller Kurszugang geändert';
 $string['privacy:metadata:enrol_storefront_purchase:timestart'] = 'Beginn des Zugangs.';
 $string['privacy:metadata:enrol_storefront_purchase:timeend'] = 'Ende des Zugangs oder null für unbegrenzten Zugang.';
 $string['privacy:metadata:enrol_storefront_purchase:timecreated'] = 'Zeitpunkt der Erstellung.';
@@ -41,11 +50,11 @@ $string['licensepolicydegradation'] = 'Die Kursauslieferung ist in Storefront en
 // Shared independent signed update protection.
 $string['updateguard_heading'] = 'Update angehalten';
 $string['updateguard_component'] = 'Das Paket für {$a} wurde abgewiesen.';
-$string['updateguard_hint'] = 'Verwende ein freigegebenes Paket für die installierte Ausgabe. Du kannst den Vorgang erneut prüfen.';
+$string['updateguard_hint'] = 'Verwende ein geprüftes, mit dem installierten Plugin kompatibles Paket und prüfe den Vorgang erneut.';
 $string['updateguard_unchanged'] = 'Dieser Vorgang hat keine Plugin-Dateien ersetzt.';
-$string['updateguard_help'] = 'Das installierte Plugin prüft vor dem Ersetzen die Herausgebersignatur, den Paketinhalt, den erlaubten Updatekanal und die Kompatibilität. Eine gültige Signatur erlaubt keinen Wechsel auf eine andere Ausgabe. Wird ein Paket abgewiesen, stoppt die gesamte Sammelaktion.';
+$string['updateguard_help'] = 'Vor dem Dateiersatz prüft das installierte Plugin Herausgebersignatur, Paketinhalt, Updatekanal und Kompatibilität. Ein abgewiesenes Paket stoppt die gesamte Sammelaktion.';
 $string['updateguard_signature'] = 'Die Herausgebersignatur oder der Paketinhalt konnte nicht bestätigt werden.';
-$string['updateguard_policy'] = 'Das Paket passt nicht zur installierten Ausgabe oder zum erlaubten Paketprofil.';
+$string['updateguard_policy'] = 'Das installierte Plugin akzeptiert dieses Paketprofil oder diesen Updatepfad nicht.';
 $string['updateguard_channel'] = 'Updates über diesen Kanal sind für dieses Plugin nicht freigegeben.';
 $string['updateguard_metadata'] = 'Die Versions- oder Abhängigkeitsangaben sind nicht konsistent.';
 $string['updateguard_dependency'] = 'Eine benötigte Plugin-Version fehlt. Aktualisiere die Abhängigkeit gemeinsam mit diesem Plugin oder vorher.';

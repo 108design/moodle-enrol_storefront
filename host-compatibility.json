@@ -1,0 +1,8 @@
+{
+  "schema": 1,
+  "component": "enrol_storefront",
+  "host_minimums": {
+    "le": 2026010106,
+    "free-core": 2026110624
+  }
+}

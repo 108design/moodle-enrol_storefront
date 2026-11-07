@@ -121,6 +121,7 @@ class enrol_storefront_plugin extends enrol_plugin {
         $mform->addElement('text', 'name', get_string('custominstancename', 'enrol'));
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
+        $mform->addHelpButton('name', 'instancename', 'enrol_storefront');
 
         $mform->addElement('select', 'customint1', get_string('product', 'enrol_storefront'),
             $this->product_options((int) $context->instanceid, (int) ($instance->customint1 ?? 0)));
@@ -133,9 +134,11 @@ class enrol_storefront_plugin extends enrol_plugin {
             ENROL_INSTANCE_DISABLED => get_string('no'),
         ]);
         $mform->setDefault('status', ENROL_INSTANCE_ENABLED);
+        $mform->addHelpButton('status', 'instancestatus', 'enrol_storefront');
 
         $roles = get_default_enrol_roles($context, $instance->roleid ?? 0);
         $mform->addElement('select', 'roleid', get_string('role'), $roles);
+        $mform->addHelpButton('roleid', 'instancerole', 'enrol_storefront');
         if (empty($instance->id)) {
             $studentroles = get_archetype_roles('student');
             if ($studentroles) {

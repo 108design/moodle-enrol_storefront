@@ -13,8 +13,8 @@ defined('MOODLE_INTERNAL') || die();
 
 function xmldb_enrol_storefront_upgrade(int $oldversion): bool {
     global $DB;
-    require_once(__DIR__ . '/le_upgrade.php');
-    if (xmldb_enrol_storefront_upgrade_le($oldversion)) { $oldversion = 2026110600; }
+    require_once(__DIR__ . '/host.php');
+    enrol_storefront_require_host();
     if ($oldversion < 2026081003) {
         $sql = "UPDATE {enrol} e
                    SET customchar1 = (SELECT p.identifier
@@ -47,6 +47,15 @@ function xmldb_enrol_storefront_upgrade(int $oldversion): bool {
     if ($oldversion < 2026090701) {
         // Version-only savepoint for the Storefront 2026090702 dependency floor.
         upgrade_plugin_savepoint(true, 2026090701, 'enrol', 'storefront');
+    }
+    if ($oldversion < 2026110701) {
+        $dbman = $DB->get_manager();
+        $table = new xmldb_table('enrol_storefront_purchase');
+        $field = new xmldb_field('manualsuspended', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, '0', 'status');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_plugin_savepoint(true, 2026110701, 'enrol', 'storefront');
     }
     return true;
 }

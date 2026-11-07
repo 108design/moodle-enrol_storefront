@@ -39,6 +39,7 @@ final class provider implements
             'orderlineid' => 'privacy:metadata:enrol_storefront_purchase:orderlineid',
             'courseid' => 'privacy:metadata:enrol_storefront_purchase:courseid',
             'status' => 'privacy:metadata:enrol_storefront_purchase:status',
+            'manualsuspended' => 'privacy:metadata:enrol_storefront_purchase:manualsuspended',
             'timestart' => 'privacy:metadata:enrol_storefront_purchase:timestart',
             'timeend' => 'privacy:metadata:enrol_storefront_purchase:timeend',
             'timecreated' => 'privacy:metadata:enrol_storefront_purchase:timecreated',

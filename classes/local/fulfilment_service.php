@@ -219,6 +219,17 @@ final class fulfilment_service {
         self::set_line_status($orderlineid, 'active');
     }
 
+    /** Change the operator's hold on one delivered purchase without changing its provider state. */
+    public static function set_manual_suspension(int $purchaseid, int $orderid, int $userid, bool $suspended): void {
+        global $DB;
+        $purchase = $DB->get_record('enrol_storefront_purchase', [
+            'id' => $purchaseid,
+            'orderid' => $orderid,
+            'userid' => $userid,
+        ], '*', MUST_EXIST);
+        self::update_access_field([$purchase], 'manualsuspended', (int) $suspended);
+    }
+
     /** Remove course delivery created by explicitly verified sandbox orders. */
     public static function purge_test_orders(array $orderids, int $productid): void {
         global $DB;
@@ -333,24 +344,42 @@ final class fulfilment_service {
 
     /** @param \stdClass[] $purchases */
     private static function set_purchase_status(array $purchases, string $status): void {
+        self::update_access_field($purchases, 'status', $status);
+    }
+
+    /** Update the selected state under the same locks used for fulfilment and renewal. */
+    private static function update_access_field(array $purchases, string $field, string|int $value): void {
         global $DB;
         $pairs = array_map(static fn(\stdClass $purchase): array => [
             (int) $purchase->enrolid,
             (int) $purchase->userid,
         ], $purchases);
         $ids = array_map(static fn(\stdClass $purchase): int => (int) $purchase->id, $purchases);
-        access_lock::with_pairs($pairs, static function() use ($DB, $ids, $status): void {
+        access_lock::with_pairs($pairs, static function() use ($DB, $ids, $field, $value): void {
             $transaction = $DB->start_delegated_transaction();
             $affected = [];
             foreach ($ids as $id) {
-                $purchase = $DB->get_record('enrol_storefront_purchase', ['id' => $id]);
+                $purchase = $DB->get_record('enrol_storefront_purchase', ['id' => $id], '*',
+                    $field === 'manualsuspended' ? MUST_EXIST : IGNORE_MISSING);
                 if (!$purchase) {
                     continue;
                 }
                 $instance = $DB->get_record('enrol', ['id' => $purchase->enrolid, 'enrol' => 'storefront']);
-                $purchase->status = $status;
-                $purchase->timemodified = time();
-                $DB->update_record('enrol_storefront_purchase', $purchase);
+                if ($field === 'status' || (int) $purchase->manualsuspended !== $value) {
+                    $DB->update_record('enrol_storefront_purchase', (object) [
+                        'id' => $purchase->id,
+                        $field => $value,
+                        'timemodified' => time(),
+                    ]);
+                    if ($field === 'manualsuspended') {
+                        \enrol_storefront\event\manual_access_changed::create([
+                            'objectid' => $purchase->id,
+                            'context' => \context_course::instance($purchase->courseid),
+                            'relateduserid' => $purchase->userid,
+                            'other' => ['suspended' => (bool) $value],
+                        ])->trigger();
+                    }
+                }
                 if ($instance) {
                     $affected[$purchase->enrolid . ':' . $purchase->userid] = [
                         $instance,
@@ -376,7 +405,7 @@ final class fulfilment_service {
             return;
         }
         $sql = "SELECT * FROM {enrol_storefront_purchase}
-                 WHERE enrolid = :enrolid AND userid = :userid AND status = :status
+                 WHERE enrolid = :enrolid AND userid = :userid AND status = :status AND manualsuspended = 0
                    AND (timeend = 0 OR timeend > :now)";
         $active = $DB->get_records_sql($sql, [
             'enrolid' => $instance->id,

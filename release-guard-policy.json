@@ -17,5 +17,5 @@
     "108design-release-2026-11-a": "QmloBGPstYkn8cuGA+l0QEPSczVj8KOKLWj5L2XRFOw=",
     "108design-release-2026-11-r1": "JN7UEzj+H0FeuTudcm4P+pJlvpWWNtWDkaecgvpx5lA="
   },
-  "upgrade_family": "legacy-storefront"
+  "upgrade_family": "storefront-enrolment"
 }

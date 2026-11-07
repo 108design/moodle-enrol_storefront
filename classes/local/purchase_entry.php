@@ -11,6 +11,7 @@ final class purchase_entry {
         if (!enrol_is_enabled('storefront') || !class_exists(\local_storefront\local\catalogue::class)
                 || !class_exists(\local_storefront\local\product_selection::class)
                 || !method_exists(\local_storefront\local\product_selection::class, 'add')
+                || !method_exists(\local_storefront\local\store_access::class, 'can_view')
                 || !\local_storefront\local\store_access::can_view()
                 || !has_capability('local/storefront:viewcatalogue', \context_system::instance())) { return []; }
         $context = \context_course::instance($courseid);
@@ -70,10 +71,10 @@ final class purchase_entry {
         if (method_exists(\local_storefront\local\product_selection::class, 'choose')) {
             \local_storefront\local\product_selection::choose($entry['product']->identifier, 'paid',
                 $entry['offer']->identifier);
+            $SESSION->enrol_storefront_origin = ['courseid' => $courseid, 'time' => time()];
         } else {
             \local_storefront\local\product_selection::add($offerid);
         }
-        $SESSION->enrol_storefront_origin = ['courseid' => $courseid, 'time' => time()];
     }
 
     /** Bind the hint to a real new order; it never constitutes payment proof or grants access. */
