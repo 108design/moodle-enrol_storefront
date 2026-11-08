@@ -12,6 +12,17 @@ account.
 See [Storefront LE](https://github.com/108design/moodle-local_storefront-le) for
 downloads and setup instructions.
 
+## Screenshots
+
+<details>
+<summary>View screenshots</summary>
+
+![Store link on the course enrolment page](docs/screenshots/storefront-course-access.jpg)
+
+![Enrolment method with a product, role and access duration](docs/screenshots/storefront-enrolment.jpg)
+
+</details>
+
 ## Set up course access
 
 1. Install a compatible 108design Storefront release on Moodle 4.5 or later.
