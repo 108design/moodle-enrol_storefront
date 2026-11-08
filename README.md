@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/108design/moodle-enrol_storefront/main/docs/branding/logo.svg" alt="108design Storefront Helpers logo" width="125" height="125">
+</p>
+
 # Storefront Enrolment
 
 Link 108design Storefront products to Moodle courses. Storefront handles offers,
