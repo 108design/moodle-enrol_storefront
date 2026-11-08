@@ -9,6 +9,9 @@ checkout and payment verification. Storefront Enrolment grants access to the
 linked courses once Storefront confirms payment and identifies the buyer's Moodle
 account.
 
+See [Storefront LE](https://github.com/108design/moodle-local_storefront-le) for
+downloads and setup instructions.
+
 ## Set up course access
 
 1. Install a compatible 108design Storefront release on Moodle 4.5 or later.
