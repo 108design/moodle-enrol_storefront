@@ -1,9 +1,27 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/108design/moodle-enrol_storefront/main/docs/branding/logo.svg" alt="108design Storefront Helpers logo" width="125" height="125">
+</p>
+
 # Storefront Enrolment
 
 Link 108design Storefront products to Moodle courses. Storefront handles offers,
 checkout and payment verification. Storefront Enrolment grants access to the
 linked courses once Storefront confirms payment and identifies the buyer's Moodle
 account.
+
+See [Storefront LE](https://github.com/108design/moodle-local_storefront-le) for
+downloads and setup instructions.
+
+## Screenshots
+
+<details>
+<summary>View screenshots</summary>
+
+![Store link on the course enrolment page](docs/screenshots/storefront-course-access.jpg)
+
+![Enrolment method with a product, role and access duration](docs/screenshots/storefront-enrolment.jpg)
+
+</details>
 
 ## Set up course access
 
