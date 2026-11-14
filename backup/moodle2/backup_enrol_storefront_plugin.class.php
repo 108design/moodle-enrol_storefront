@@ -1,4 +1,5 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
 /**
  * Native backup and restore integration for Storefront Enrolment.
  *
