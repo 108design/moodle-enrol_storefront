@@ -31,6 +31,12 @@
 "/db/install.php" -export-ignore -export-subst
 "/db/install.xml" -export-ignore -export-subst
 "/db/upgrade.php" -export-ignore -export-subst
+"/docs" export-ignore -export-subst
+"/docs/branding" export-ignore -export-subst
+"/docs/branding/logo.svg" export-ignore -export-subst
+"/docs/screenshots" export-ignore -export-subst
+"/docs/screenshots/storefront-course-access.jpg" export-ignore -export-subst
+"/docs/screenshots/storefront-enrolment.jpg" export-ignore -export-subst
 "/host-compatibility.json" -export-ignore -export-subst
 "/lang" -export-ignore -export-subst
 "/lang/de" -export-ignore -export-subst
