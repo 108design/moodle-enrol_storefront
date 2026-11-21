@@ -17,9 +17,9 @@ defined('MOODLE_INTERNAL') || die();
 /** Check the host contract that Moodle's single numeric dependency cannot express. */
 function enrol_storefront_require_host(): void {
     global $CFG;
-    $guard = \design108\update_guard\v1\guard::class;
+    $guard = \design108\release_metadata\v1\guard::class;
     if (!class_exists($guard, false)) {
-        require_once(__DIR__ . '/../update-guard.php');
+        require_once(__DIR__ . '/../release-metadata.php');
     }
     $root = $CFG->dirroot . '/local/storefront';
     try {

@@ -69,12 +69,19 @@ $string['updateguard_back'] = 'Return to plugin overview';
 
 $string['enrolperiod'] = 'Course Access Duration';
 
-$string['enrolperiod_help'] = ('Leave disabled for access without a scheduled end date. A timed period starts '
-    . 'when course access is delivered. Changes apply to future orders; saved orders '
-    . 'retain their original duration.');
+$string['enrolperiod_help'] = 'Leave disabled for access without a scheduled end date. A timed period starts when course access is delivered. Changes apply to future orders; saved orders retain their original duration.';
 
 $string['unlimitedaccess'] = 'No fixed end date';
 $string['gateway_buy'] = 'Buy course access';
 $string['gateway_oneoff'] = 'One-time payment. Access starts when provisioned; the duration is shown per course.';
 $string['gateway_subscription'] = 'Subscription. Check the billing interval and terms at checkout.';
 $string['gateway_return'] = 'Continue to your course';
+
+// Optional information before native package confirmation.
+$string['updateinfo_heading'] = 'Package information: {$a}';
+$string['updateinfo_verified'] = 'The embedded publisher record matches the installed release line.';
+$string['updateinfo_missing'] = 'This package has no embedded publisher verification record.';
+$string['updateinfo_line'] = 'This package identifies a different release line from the installed plugin.';
+$string['updateinfo_mismatch'] = 'The embedded publisher record could not be verified against the installed plugin\'s publisher information.';
+$string['updateinfo_unavailable'] = 'Publisher information for the selected package could not be read.';
+$string['updateinfo_choice'] = 'Review the package source and Moodle\'s validation details before continuing. Use "{$a}" below to cancel.';

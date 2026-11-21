@@ -69,13 +69,19 @@ $string['updateguard_back'] = 'Zur Pluginübersicht';
 
 $string['enrolperiod'] = 'Dauer des Kurszugangs';
 
-$string['enrolperiod_help'] = ('Ohne Aktivierung hat der Zugang kein geplantes Enddatum. Ein befristeter '
-    . 'Zeitraum beginnt bei der Auslieferung des Kurszugangs. Änderungen gelten '
-    . 'für zukünftige Bestellungen; gespeicherte Bestellungen behalten ihre '
-    . 'ursprüngliche Dauer.');
+$string['enrolperiod_help'] = 'Ohne Aktivierung hat der Zugang kein geplantes Enddatum. Ein befristeter Zeitraum beginnt bei der Auslieferung des Kurszugangs. Änderungen gelten für zukünftige Bestellungen; gespeicherte Bestellungen behalten ihre ursprüngliche Dauer.';
 
 $string['unlimitedaccess'] = 'Ohne festes Enddatum';
 $string['gateway_buy'] = 'Kurszugang kaufen';
 $string['gateway_oneoff'] = 'Einmalzahlung. Der Zugang beginnt mit der Freischaltung; die Dauer steht beim jeweiligen Kurs.';
 $string['gateway_subscription'] = 'Abonnement. Zahlungsintervall und Bedingungen stehen im Checkout.';
 $string['gateway_return'] = 'Weiter zu Deinem Kurs';
+
+// Optional information before native package confirmation.
+$string['updateinfo_heading'] = 'Paketinformationen: {$a}';
+$string['updateinfo_verified'] = 'Der eingebettete Herausgebernachweis passt zur installierten Ausgabe.';
+$string['updateinfo_missing'] = 'Dieses Paket enthält keinen eingebetteten Herausgebernachweis.';
+$string['updateinfo_line'] = 'Dieses Paket gehört zu einer anderen Ausgabe als das installierte Plugin.';
+$string['updateinfo_mismatch'] = 'Der eingebettete Herausgebernachweis konnte mit den Angaben des installierten Plugins nicht bestätigt werden.';
+$string['updateinfo_unavailable'] = 'Die Herausgeberinformationen für das ausgewählte Paket konnten nicht gelesen werden.';
+$string['updateinfo_choice'] = 'Kontrolliere vor dem Fortfahren die Paketquelle und Moodles Prüfergebnisse. Mit „{$a}“ unten kannst Du abbrechen.';

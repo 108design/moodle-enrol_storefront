@@ -1,0 +1,63 @@
+name: enrol_storefront checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: enrol_storefront-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Moodle 5.2 / PHP 8.3 / MariaDB
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      mariadb:
+        image: mariadb:11.4
+        env:
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: '1'
+          MYSQL_CHARACTER_SET_SERVER: utf8mb4
+          MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+        ports: ['3306:3306']
+        options: --health-cmd="healthcheck.sh --connect --innodb_initialized" --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - name: Check out enrol_storefront
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          path: plugin
+          persist-credentials: false
+      - name: Set up PHP 8.3
+        uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2
+        with:
+          php-version: '8.3'
+          extensions: curl, dom, exif, fileinfo, gd, intl, mbstring, mysqli, soap, sodium, xml, xmlreader, zip
+          ini-values: max_input_vars=5000, memory_limit=768M
+          coverage: none
+      - name: Prepare Moodle Plugin CI
+        shell: bash
+        run: |
+          composer create-project --no-interaction --no-dev --prefer-dist moodlehq/moodle-plugin-ci ci ^4
+          echo "$(pwd)/ci/bin" >> "$GITHUB_PATH"
+          echo "$(pwd)/ci/vendor/bin" >> "$GITHUB_PATH"
+          sudo locale-gen en_AU.UTF-8
+          echo "NVM_DIR=$HOME/.nvm" >> "$GITHUB_ENV"
+      - name: Add public Storefront LE host dependency
+        run: moodle-plugin-ci add-plugin --branch main 108design/moodle-local_storefront-le
+      - name: Install Moodle 5.2 test fixture
+        run: moodle-plugin-ci install --plugin ./plugin --db-host=127.0.0.1 --no-plugin-node
+        env:
+          DB: mariadb
+          MOODLE_BRANCH: MOODLE_502_STABLE
+      - name: Check PHP syntax
+        run: moodle-plugin-ci phplint
+      - name: Validate plugin metadata
+        run: moodle-plugin-ci validate
+      - name: Run only enrol_storefront tests
+        run: moodle-plugin-ci phpunit --testsuite enrol_storefront_testsuite --fail-on-warning --fail-on-risky --fail-on-skipped
