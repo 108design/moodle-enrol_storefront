@@ -18,7 +18,7 @@ $string['storefront:config'] = 'Configure Storefront course purchase enrolment';
 $string['storefront:manage'] = 'Manage Storefront course purchase enrolments';
 $string['storefront:unenrol'] = 'Unenrol Storefront course customers';
 $string['product'] = 'Storefront product';
-$string['product_help'] = 'Links this course to a Storefront license, software or course product. One product may include multiple courses and one course may belong to multiple products.';
+$string['product_help'] = 'Links this course to a Storefront licence, software or course product. One product may include multiple courses and one course may belong to multiple products.';
 $string['productmissing'] = 'Select an available Storefront product.';
 $string['productmapped'] = 'This product is already linked to this course.';
 $string['instanceexists'] = 'This course already has a Storefront purchase enrolment method.';
@@ -30,7 +30,7 @@ $string['instancestatus'] = 'Status';
 $string['instancestatus_help'] = 'Enable this mapping to deliver course access for the selected Storefront product.';
 $string['instancerole'] = 'Role';
 $string['instancerole_help'] = 'The plugin assigns this Moodle role in the course when it delivers access.';
-$string['gotostore'] = 'View in Store';
+$string['gotostore'] = 'View in store';
 $string['courselink'] = '{$a->product} · {$a->course}';
 $string['mappingunavailable'] = 'This Storefront product is not linked to an available course enrolment method.';
 $string['subscriptionexpiryinvalid'] = 'The verified subscription period does not grant current course access.';
@@ -46,9 +46,7 @@ $string['privacy:metadata:enrol_storefront_purchase:timestart'] = 'When access b
 $string['privacy:metadata:enrol_storefront_purchase:timeend'] = 'When access ends, or zero for unlimited access.';
 $string['privacy:metadata:enrol_storefront_purchase:timecreated'] = 'When the delivery record was created.';
 $string['privacy:metadata:enrol_storefront_purchase:timemodified'] = 'When the delivery record was last changed.';
-$string['licensepolicydegradation'] = 'Course fulfilment is included in Storefront and has no separate license gate. Normal dependency preflight remains in place.';
-
-// Shared independent signed update protection.
+$string['licensepolicydegradation'] = 'Course fulfilment is included in Storefront and has no separate licence gate. Normal dependency preflight remains in place.';
 $string['updateguard_heading'] = 'Update stopped';
 $string['updateguard_component'] = 'The package for {$a} was rejected.';
 $string['updateguard_hint'] = 'Use a verified package compatible with the installed plugin and review the operation again.';
@@ -65,19 +63,13 @@ $string['updateguard_installed'] = 'The installed update protection is incomplet
 $string['updateguard_operation'] = 'This combination of installation actions is not supported. Start a single update operation again.';
 $string['updateguard_failed'] = 'The update could not be verified. No installation was started.';
 $string['updateguard_back'] = 'Return to plugin overview';
-// End shared independent signed update protection.
-
-$string['enrolperiod'] = 'Course Access Duration';
-
+$string['enrolperiod'] = 'Course access duration';
 $string['enrolperiod_help'] = 'Leave disabled for access without a scheduled end date. A timed period starts when course access is delivered. Changes apply to future orders; saved orders retain their original duration.';
-
 $string['unlimitedaccess'] = 'No fixed end date';
 $string['gateway_buy'] = 'Buy course access';
 $string['gateway_oneoff'] = 'One-time payment. Access starts when provisioned; the duration is shown per course.';
 $string['gateway_subscription'] = 'Subscription. Check the billing interval and terms at checkout.';
 $string['gateway_return'] = 'Continue to your course';
-
-// Optional information before native package confirmation.
 $string['updateinfo_heading'] = 'Package information: {$a}';
 $string['updateinfo_verified'] = 'The embedded publisher record matches the installed release line.';
 $string['updateinfo_missing'] = 'This package has no embedded publisher verification record.';

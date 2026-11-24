@@ -13,7 +13,7 @@
 $string['pluginname'] = 'Storefront Enrolment';
 $string['licensepolicyproduct'] = 'Storefront Enrolment';
 $string['pluginname_desc'] = 'Verknüpft Storefront-Produkte mit Moodle-Kursen und schaltet den Zugang frei, sobald Storefront die Zahlung bestätigt.';
-$string['hostunsupported'] = 'Installiere oder aktualisiere 108design Storefront auf eine kompatible Version, bevor Du fortfährst.';
+$string['hostunsupported'] = 'Installieren oder aktualisieren Sie 108design Storefront auf eine kompatible Version, bevor Sie fortfahren.';
 $string['storefront:config'] = 'Einschreibemethode Storefront Enrolment konfigurieren';
 $string['storefront:manage'] = 'Einschreibungen aus Storefront-Kurskäufen verwalten';
 $string['storefront:unenrol'] = 'Storefront-Kund/innen ausschreiben';
@@ -25,9 +25,9 @@ $string['instanceexists'] = 'Dieser Kurs besitzt bereits die Einschreibemethode 
 $string['restorehint'] = 'Wiederhergestellter, nicht aktiver Storefront-Hinweis: {$a}';
 $string['purchasenote'] = 'Die Einschreibemethode schaltet den Kurszugang frei, sobald Storefront die Zahlung bestätigt und die Bestellung dem Moodle-Konto zugeordnet hat.';
 $string['instancename'] = 'Angepasster Name';
-$string['instancename_help'] = 'Mit einem eigenen Namen kannst Du diese Zuordnung von den anderen Einschreibemethoden des Kurses unterscheiden.';
+$string['instancename_help'] = 'Mit einem eigenen Namen können Sie diese Zuordnung von den anderen Einschreibemethoden des Kurses unterscheiden.';
 $string['instancestatus'] = 'Status';
-$string['instancestatus_help'] = 'Aktiviere die Zuordnung, damit der Kauf des ausgewählten Storefront-Produkts den Kurszugang freischaltet.';
+$string['instancestatus_help'] = 'Aktivieren Sie die Zuordnung, damit der Kauf des ausgewählten Storefront-Produkts den Kurszugang freischaltet.';
 $string['instancerole'] = 'Rolle';
 $string['instancerole_help'] = 'Bei der Freischaltung weist das Plugin diese Moodle-Rolle im Kurs zu.';
 $string['gotostore'] = 'Im Store ansehen';
@@ -47,41 +47,33 @@ $string['privacy:metadata:enrol_storefront_purchase:timeend'] = 'Ende des Zugang
 $string['privacy:metadata:enrol_storefront_purchase:timecreated'] = 'Zeitpunkt der Erstellung.';
 $string['privacy:metadata:enrol_storefront_purchase:timemodified'] = 'Zeitpunkt der letzten Änderung.';
 $string['licensepolicydegradation'] = 'Die Kursauslieferung ist in Storefront enthalten und besitzt kein eigenes Lizenz-Gate. Die normale Abhängigkeitsprüfung bleibt bestehen.';
-
-// Shared independent signed update protection.
 $string['updateguard_heading'] = 'Update angehalten';
 $string['updateguard_component'] = 'Das Paket für {$a} wurde abgewiesen.';
-$string['updateguard_hint'] = 'Verwende ein geprüftes, mit dem installierten Plugin kompatibles Paket und prüfe den Vorgang erneut.';
+$string['updateguard_hint'] = 'Verwenden Sie ein geprüftes, mit dem installierten Plugin kompatibles Paket und prüfen Sie den Vorgang erneut.';
 $string['updateguard_unchanged'] = 'Dieser Vorgang hat keine Plugin-Dateien ersetzt.';
 $string['updateguard_help'] = 'Vor dem Dateiersatz prüft das installierte Plugin Herausgebersignatur, Paketinhalt, Updatekanal und Kompatibilität. Ein abgewiesenes Paket stoppt die gesamte Sammelaktion.';
 $string['updateguard_signature'] = 'Die Herausgebersignatur oder der Paketinhalt konnte nicht bestätigt werden.';
 $string['updateguard_policy'] = 'Das installierte Plugin akzeptiert dieses Paketprofil oder diesen Updatepfad nicht.';
 $string['updateguard_channel'] = 'Updates über diesen Kanal sind für dieses Plugin nicht freigegeben.';
 $string['updateguard_metadata'] = 'Die Versions- oder Abhängigkeitsangaben sind nicht konsistent.';
-$string['updateguard_dependency'] = 'Eine benötigte Plugin-Version fehlt. Aktualisiere die Abhängigkeit gemeinsam mit diesem Plugin oder vorher.';
-$string['updateguard_approval'] = 'Die Pakete oder der installierte Stand haben sich seit der Vorschau geändert. Prüfe den Vorgang erneut.';
-$string['updateguard_busy'] = 'Eine andere Installation läuft. Versuche es nach deren Abschluss erneut.';
-$string['updateguard_installed'] = 'Der installierte Updateschutz ist unvollständig. Stelle die Dateien der zuletzt installierten freigegebenen Version wieder her.';
-$string['updateguard_operation'] = 'Diese Kombination von Installationsaktionen wird nicht unterstützt. Starte einen einzelnen Updatevorgang erneut.';
+$string['updateguard_dependency'] = 'Eine benötigte Plugin-Version fehlt. Aktualisieren Sie die Abhängigkeit gemeinsam mit diesem Plugin oder vorher.';
+$string['updateguard_approval'] = 'Die Pakete oder der installierte Stand haben sich seit der Vorschau geändert. Prüfen Sie den Vorgang erneut.';
+$string['updateguard_busy'] = 'Eine andere Installation läuft. Versuchen Sie es nach deren Abschluss erneut.';
+$string['updateguard_installed'] = 'Der installierte Updateschutz ist unvollständig. Stellen Sie die Dateien der zuletzt installierten freigegebenen Version wieder her.';
+$string['updateguard_operation'] = 'Diese Kombination von Installationsaktionen wird nicht unterstützt. Starten Sie einen einzelnen Updatevorgang erneut.';
 $string['updateguard_failed'] = 'Das Update konnte nicht geprüft werden. Es wurde keine Installation gestartet.';
 $string['updateguard_back'] = 'Zur Pluginübersicht';
-// End shared independent signed update protection.
-
 $string['enrolperiod'] = 'Dauer des Kurszugangs';
-
 $string['enrolperiod_help'] = 'Ohne Aktivierung hat der Zugang kein geplantes Enddatum. Ein befristeter Zeitraum beginnt bei der Auslieferung des Kurszugangs. Änderungen gelten für zukünftige Bestellungen; gespeicherte Bestellungen behalten ihre ursprüngliche Dauer.';
-
 $string['unlimitedaccess'] = 'Ohne festes Enddatum';
 $string['gateway_buy'] = 'Kurszugang kaufen';
 $string['gateway_oneoff'] = 'Einmalzahlung. Der Zugang beginnt mit der Freischaltung; die Dauer steht beim jeweiligen Kurs.';
 $string['gateway_subscription'] = 'Abonnement. Zahlungsintervall und Bedingungen stehen im Checkout.';
-$string['gateway_return'] = 'Weiter zu Deinem Kurs';
-
-// Optional information before native package confirmation.
+$string['gateway_return'] = 'Weiter zu Ihrem Kurs';
 $string['updateinfo_heading'] = 'Paketinformationen: {$a}';
 $string['updateinfo_verified'] = 'Der eingebettete Herausgebernachweis passt zur installierten Ausgabe.';
 $string['updateinfo_missing'] = 'Dieses Paket enthält keinen eingebetteten Herausgebernachweis.';
 $string['updateinfo_line'] = 'Dieses Paket gehört zu einer anderen Ausgabe als das installierte Plugin.';
 $string['updateinfo_mismatch'] = 'Der eingebettete Herausgebernachweis konnte mit den Angaben des installierten Plugins nicht bestätigt werden.';
 $string['updateinfo_unavailable'] = 'Die Herausgeberinformationen für das ausgewählte Paket konnten nicht gelesen werden.';
-$string['updateinfo_choice'] = 'Kontrolliere vor dem Fortfahren die Paketquelle und Moodles Prüfergebnisse. Mit „{$a}“ unten kannst Du abbrechen.';
+$string['updateinfo_choice'] = 'Kontrollieren Sie vor dem Fortfahren die Paketquelle und Moodles Prüfergebnisse. Mit „{$a}“ unten können Sie abbrechen.';
